@@ -1,0 +1,858 @@
+/**
+ *
+ * Bobby Richmond
+ * cs456
+ * assignment 1
+ * 09/19/2014
+ */
+
+
+import java.util.BitSet;
+import java.util.Scanner;
+import java.io.*;
+import java.nio.*;
+
+
+public class assign1{
+
+
+    public static final int[][] S1 = {{ 14,4,13,1,2,15,11,8,3,10,6,12,5,9,0,7}, 
+				     
+				      {0,15,7,4,14,2,13,1,10,6,12,11,9,5,3,8}, 
+				     
+				      {4,1,14,8,13,6,2,11,15,12,9,7,3,10,5,0}, 
+
+				      {15,12,8,2,4,9,1,7,5,11,3,14,10,0,6,13} };
+
+
+
+    public static final int[][] S2 = {{ 15,1,8,14,6,11,3,4,9,7,2,13,12,0,5,10},
+				    
+				      {3,13,4,7,15,2,8,14,12,0,1,10,6,9,11,5},
+				    
+				      {0,14,7,11,10,4,13,1,5,8,12,6,9,3,2,15},
+				    
+				      { 13,8,10,1,3,15,4,2,11,6,7,12,0,5,14,9} };
+    
+    
+    public static final int[][] S3 = { {10,0,9,14,6,3,15,5,1,13,12,7,11,4,2,8},
+				     
+				       {13,7,0,9,3,4,6,10,2,8,5,14,12,11,15,1},
+				     
+				       {13,6,4,9,8,15,3,0,11,1,2,12,5,10,14,7},
+				     
+				       {1,10,13,0,6,9,8,7,4,15,14,3,11,5,2,12} };
+    
+    
+    public static final int[][] S4 = { {7,13,14,3,0,6,9,10,1,2,8,5,11,12,4,15},
+
+				       {13,8,11,5,6,15,0,3,4,7,2,12,1,10,14,9},
+				       
+				       {10,6,9,0,12,11,7,13,15,1,3,14,5,2,8,4},
+				       
+				       {3,15,0,6,10,1,13,8,9,4,5,11,12,7,2,14} };
+    
+
+    
+    public static final int[][] S5 = { {2,12,4,1,7,10,11,6,8,5,3,15,13,0,14,9},
+				       
+				       {14,11,2,12,4,7,13,1,5,0,15,10,3,9,8,6},
+				       
+				       {4,2,1,11,10,13,7,8,15,9,12,5,6,3,0,14},
+				       
+				       {11,8,12,7,1,14,2,13,6,15,0,9,10,4,5,3} };
+    
+    
+    public static final int[][] S6 = { {12,1,10,15,9,2,6,8,0,13,3,4,14,7,5,11},
+
+				       {10,15,4,2,7,12,9,5,6,1,13,14,0,11,3,8},
+
+				       {9,14,15,5,2,8,12,3,7,0,4,10,1,13,11,6},
+
+				       {4,3,2,12,9,5,15,10,11,14,1,7,6,0,8,13} };
+    
+    
+    public static final int[][] S7 = { {4,11,2,14,15,0,8,13,3,12,9,7,5,10,6,1},
+				     
+				       {13,0,11,7,4,9,1,10,14,3,5,12,2,15,8,6},
+				     
+				       {1,4,11,13,12,3,7,14,10,15,6,8,0,5,9,2},
+				     
+				       {6,11,13,8,1,4,10,7,9,5,0,15,14,2,3,12} };
+    
+    
+    public static final int[][] S8 = { {13,2,8,4,6,15,11,1,10,9,3,14,5,0,12,7},
+				       
+				       {1,15,13,8,10,3,7,4,12,5,6,11,0,14,9,2},
+				       
+				       {7,11,4,1,9,12,14,2,0,6,10,13,15,3,5,8},
+				       
+				       {2,1,14,7,4,10,8,13,15,12,9,0,3,5,6,11} };
+
+
+
+
+    public static final int[] P = {16, 7, 20, 21, 
+
+				   29, 12, 28, 17, 
+
+				   1, 15, 23, 26, 
+
+				   5, 18, 31, 10, 
+
+				   2, 8, 24, 14, 
+
+				   32, 27, 3, 9, 
+
+				   19, 13, 30, 6, 
+
+				   22, 11, 4, 25 };
+
+    public static final int[] E = {32, 1, 2, 3, 4, 5, 
+
+				   4, 5, 6, 7, 8, 9, 
+
+				   8, 9, 10, 11, 12, 13, 
+
+				   12, 13, 14, 15, 16, 17, 
+
+				   16, 17, 18, 19, 20, 21, 
+
+				   20, 21, 22, 23, 24, 25, 
+				   
+				   24, 25, 26, 27, 28, 29, 
+
+				   28, 29, 30, 31, 32, 1 };
+
+    public static final int[] PC1 = {57, 49, 41, 33, 25, 17, 9, 
+				     
+				     1, 58, 50, 42, 34, 26, 18, 
+				     
+				     10, 2, 59, 51, 43, 35, 27, 
+				     
+				     19, 11, 3, 60, 52, 44, 36, 
+				     
+				     63, 55, 47, 39, 31, 23, 15, 
+				     
+				     7, 62, 54, 46, 38, 30, 22, 
+
+				     14, 6, 61, 53, 45, 37, 29, 
+				     
+				     21, 13, 5, 28, 20, 12, 4 };
+
+    public static final int[] PC2 = { 14, 17, 11, 24, 1, 5, 
+				      
+				      3, 28, 15, 6, 21, 10, 
+				      
+				      23, 19, 12, 4, 26, 8, 
+				      
+				      16, 7, 27, 20, 13, 2, 
+				      
+				      41, 52, 31, 37, 47, 55,
+				      
+				      30, 40, 51, 45, 33, 48,
+				      
+				      44, 49, 39, 56, 34, 53, 
+				      
+				      46, 42, 50, 36, 29, 32 };
+
+
+
+    public static final int[] IP = {58, 50, 42, 34, 26, 18, 10, 2, 
+				    
+				    60, 52, 44, 36, 28, 20, 12, 4, 
+				    
+				    62, 54, 46, 38, 30, 22, 14, 6,
+				    
+				    64, 56, 48, 40, 32, 24, 16, 8,
+
+				    57, 49, 41, 33, 25, 17, 9, 1,
+				    
+				    59, 51, 43, 35, 27, 19, 11, 3, 
+				    
+				    61, 53, 45, 37, 29, 21, 13, 5,
+				    
+				    63, 55, 47, 39, 31, 23, 15, 7 };
+    
+    
+    public static final int[] IPinv = {40, 8, 48, 16, 56, 24, 64, 32, 
+				       
+				       39, 7, 47, 15, 55, 23, 63, 31, 
+				       
+				       38, 6, 46, 14, 54, 22, 62, 30, 
+				       
+				       37, 5, 45, 13, 53, 21, 61, 29, 
+				       
+				       36, 4, 44, 12, 52, 20, 60, 28, 
+				       
+				       35, 3, 43, 11, 51, 19, 59, 27, 
+				       
+				       34, 2, 42, 10, 50, 18, 58, 26, 
+				       
+				       33, 1, 41, 9, 49, 17, 57, 25 };
+    
+    public static BitSet[] Kn = new BitSet[16];
+
+    public static void main(String[] args){
+	
+	String fileData;
+	String key;
+	int dataSize;
+	int nBlocks;
+	int dataSizePadded;
+	
+	// Read data from file
+	fileData = readData( args[0] );
+        System.out.println(fileData);
+
+
+	// Convert input data to bit representation
+	BitSet bitData = stringToBinary( fileData );
+
+
+	// Read key from user input
+	key = readKey();
+
+
+	// Convert key to binary
+        BitSet bitKey = stringToBinary( key );
+	bitKey=changeLSBtoMSB(bitKey);
+	bitKey=oddParity( bitKey);
+
+
+	// Get number of 64-bit blocks in the data.
+	nBlocks = computeNumBlocks( fileData );
+	
+
+	//gets an array of bitsets(that will be 64 bits)
+	BitSet[] bitBlocks = new BitSet[nBlocks];
+	bitBlocks = DivideDataIntoBlocks( bitData, nBlocks );
+	
+
+
+
+
+
+
+	/* From this point forward we are actually implementing DES */
+	BitSet tmpBit;
+	BitSet initPermutate;
+	BitSet[] dataBlocks = new BitSet[nBlocks];
+	BitSet decrypted;
+
+	System.out.println("The key is: ");
+	printBits(bitKey, 64, "line");
+	System.out.println("the data after preprocessing is: ");
+	for(int iterator=0; iterator<nBlocks;iterator++)
+	    printBits(bitBlocks[iterator], 64, "Block");
+
+	for(int n=0; n<nBlocks;n++){
+	System.out.println("initial permutation: ");
+	tmpBit = permutate(bitBlocks[n], IP);
+	printBits( tmpBit, 64, "line" );
+	
+	System.out.println("calling encrypt: ");
+	// Call the encrypt method
+	tmpBit=encrypt( tmpBit, bitKey );
+
+	System.out.println("final permutatation: ");
+	dataBlocks[n] = permutate(tmpBit, IPinv);
+	printBits( dataBlocks[n], 64, "line" );
+	}
+
+	for(int i=0;i<16;i++){
+	    System.out.print("key " + (i+1) + " is  ");
+	    printBits(Kn[i],48,"line");
+	    System.out.println();
+	}
+	/**
+	   You do not show decrypt in your sample output file
+	*/
+
+	for(int n=0;n<nBlocks;n++){
+	System.out.println("Decrypt initial permuted ");
+	decrypted = permutate( dataBlocks[n], IP);
+	printBits( decrypted, 64, "line" );
+
+	System.out.println("calling decrypt ");
+	decrypted=decrypt(decrypted);
+	
+       	System.out.println("final permutatation: ");
+	dataBlocks[n] = permutate(decrypted, IPinv);
+	printBits( dataBlocks[n], 64, "line" );
+	}
+    }
+    
+
+
+    public static BitSet permutate(BitSet unPerBit, int[] permArray){
+	//	bitOut.set(x,bitOut.get(index));
+	int size = permArray.length;
+	BitSet perBit = new BitSet( size );
+
+	for(int k=0; k<size;k++)
+	    perBit.set(  k,unPerBit.get( permArray[k]-1 )  );
+	return perBit;
+    }
+    
+
+    // Iteration of encryption
+    public static BitSet iterate(BitSet LRBlock, BitSet KnN){
+	BitSet L = new BitSet(32);
+	BitSet R= new BitSet(32);
+	BitSet Lpr = new BitSet(32);
+	BitSet Rpr = new BitSet(32);
+	BitSet LprRpr= new BitSet(64);
+	int k=0;
+	
+	// Divide LRBlock into L and R
+	for(k=0; k<32; k++){
+	    L.set( k, LRBlock.get( k ) );
+	    R.set( k , LRBlock.get( k+32 ) );
+	}	
+	System.out.println("L is: ");
+	printBits(L,32,"line");
+	System.out.println("R is: ");
+	printBits(R,32,"line");
+
+	// Create Lprime
+	for(k=0; k<32;k++)
+	    Lpr.set(k,R.get(k));
+	
+	
+	// Not sure if our assignment is correct
+	// Create Rprime
+	L.xor( cipher(R,KnN) );
+	System.out.println("XOR with L: ");
+	printBits(L,32,"line");
+
+	for(k=0; k<32;k++)
+	    Rpr.set(k,L.get(k));
+	
+	// Assign LprimeRprime as output block
+	for(k=0;k<32;k++){
+	    LprRpr.set(k, Lpr.get(k) );
+	    LprRpr.set(k+32, Rpr.get(k) );
+	}
+	
+	// Return LprimeRprime as iteration output.
+	return LprRpr;
+	
+    }
+
+
+
+    public static BitSet cipher(BitSet R, BitSet knN){
+	BitSet re;
+	BitSet Bout;
+	BitSet SBitOut = new BitSet(32);
+	BitSet cipherOut;   // 32-bit output of cipher, f(R,K)
+
+
+	re=permutate(R,E);
+	//re becomes the xor of re and knN
+	System.out.println("Expansion permutation: ");
+	printBits(re,48, "line");
+
+       
+	re.xor(knN);
+	System.out.println("XOR with Key: ");
+	printBits(re,48,"Block");
+	
+
+	// Create temporary bitset to contain 6-bit blocks
+	BitSet Bin = new BitSet(6);
+
+	// Loop over 8 S's
+	for(int k=0; k<8;k++){
+
+	    // Read the k-th block into Bin
+	    for (int j=0;j<6;j++)
+		Bin.set(j, re.get(k*6+j) );
+	    
+	    // Form 32-bit S array
+	    Bout = computeSIndices( Bin, k );
+	    for (int j=0; j<4 ;j++ )
+		SBitOut.set( k*4 + j, Bout.get(j) );    
+	    
+	}
+	System.out.println("S-block permuted ");
+	printBits(SBitOut,32,"line");
+	
+
+	cipherOut = permutate ( SBitOut, P );
+	System.out.println("P block permuted: ");
+	printBits(cipherOut,32,"line");
+	
+	return cipherOut;
+    }
+
+
+    public static BitSet computeSIndices( BitSet Bin, int k )
+    {
+	int binNumRow;
+	int i = 0;
+	int j = 0;
+	int Sentry=0;
+	int m;
+
+	boolean tmpbool;
+	int rem;
+	int res;
+
+	BitSet Bout = new BitSet(4);
+
+	
+	// Compute index i
+	if( Bin.get(0) == true )
+	    i = i + 2;
+
+	if( Bin.get(5) == true )
+	    i = i + 1;
+
+
+	// Compute index j
+	if( Bin.get(1) == true )
+	    j = j + 8;
+
+	if( Bin.get(2) == true )
+	    j = j + 4;
+	
+	if( Bin.get(3) == true )
+	    j = j + 2;
+	
+	if( Bin.get(4) == true )
+	    j = j + 1;
+		    
+	
+
+	
+	// Get entry of S.
+	switch (k+1){
+	case 1:
+	    Sentry = S1[i][j];
+	    break;
+	case 2:
+	    Sentry = S2[i][j];
+	    break;
+	case 3:
+	    Sentry = S3[i][j];
+	    break;
+	case 4:
+	    Sentry = S4[i][j];
+	    break;
+	case 5:
+	    Sentry = S5[i][j];
+	    break;
+	case 6:
+	    Sentry = S6[i][j];
+	    break;
+	case 7:
+	    Sentry = S7[i][j];
+	    break;
+	case 8:
+	    Sentry = S8[i][j];
+	    break;
+	}	    
+	
+
+	// Convert decimal to binary
+	res = Sentry;
+	for(m=0; m < 4; m++){
+	    rem = (int)(res%2);
+	    res = (int)(res/2);
+
+
+	    
+	    if (rem == 1)
+		tmpbool = true;
+	    else 
+		tmpbool = false;
+
+	    Bout.set(3-m, tmpbool );
+	}
+
+	return Bout;
+    }
+    
+
+
+    // Output is a 3 element BitSet array
+    //  KS_StateIn[0] is CnDn
+    //  KS_StateIn[1] is Cn
+    //  KS_stateIn[2] is Dn
+    //  KS_stateIn[3] is Kn
+
+    public static BitSet[] keySchedule(int n, BitSet[] KS_StateIn){
+
+	BitSet[] KS_StateOut = new BitSet[4];
+
+	KS_StateOut[0] = new BitSet(56);  // CNDN
+	KS_StateOut[1] = new BitSet(28);  // Cn
+	KS_StateOut[2] = new BitSet(28);  // Dn
+	KS_StateOut[3] = new BitSet(48);  // Kn
+	
+
+	BitSet CnDn = new BitSet(56);
+
+	BitSet tmpC = new BitSet(2);
+	BitSet tmpD = new BitSet(2);
+
+
+	int k; // Iterator
+
+	// This is special case n=1
+	if(n+1==1){
+	    CnDn=permutate(KS_StateIn[0],PC1);
+	    KS_StateIn[1] = new BitSet(28);
+	    KS_StateIn[2] = new BitSet(28);
+	    
+	    for( k=0; k< 28; k++ ){
+		KS_StateIn[1].set( k, CnDn.get(k) );
+		KS_StateIn[2].set( k, CnDn.get(k+28) );
+	    }
+	}
+	
+		
+	// Adding 1 to n
+	switch (n + 1){
+
+	    // Shift one to the left
+	case 1: case 2: case 9: case 16:
+
+
+
+	    // This is the ugliest fucking way to rotate an array.
+	    tmpC.set( 0,KS_StateIn[1].get(0) );
+	    tmpD.set( 0,KS_StateIn[2].get(0) );	    
+	    for( k=0; k< 27; k++ ){
+		KS_StateOut[1].set( k, KS_StateIn[1].get(k+1) );
+		KS_StateOut[2].set( k, KS_StateIn[2].get(k+1) );
+	    }
+	    KS_StateOut[1].set( 27, tmpC.get(0) );
+	    KS_StateOut[2].set( 27, tmpD.get(0) );
+	    
+
+	    break;
+	    
+	    
+	    
+	    // Shift two to the left
+	case 3: case 4: case 5: case 6: case 7: 
+	case 8: case 10: case 11: case 12: case 13:
+	case 14: case 15:
+	    
+	    tmpC.set( 0,KS_StateIn[1].get(0) );
+	    tmpC.set( 1,KS_StateIn[1].get(1) );
+
+	    tmpD.set( 0,KS_StateIn[2].get(0) );
+	    tmpD.set( 1,KS_StateIn[2].get(1) );	    
+	    for( k=0; k< 26; k++ ){
+		KS_StateOut[1].set( k, KS_StateIn[1].get(k+2) );
+		KS_StateOut[2].set( k, KS_StateIn[2].get(k+2) );
+	    }
+	    KS_StateOut[1].set( 26, tmpC.get(0) );
+	    KS_StateOut[1].set( 27, tmpC.get(1) );
+
+	    KS_StateOut[2].set( 26, tmpD.get(0) );
+	    KS_StateOut[2].set( 27, tmpD.get(1) );
+	    
+
+	    break;
+	    
+	    // OH MY GOD
+	default:
+	    System.out.println("OH MY GOD N IS SO WRONG");
+	    break;
+	}
+
+
+	// Combine and permutate according to Permuted Choice 2
+	for(k=0;k<28;k++){
+	    KS_StateOut[0].set(k,KS_StateOut[1].get(k));
+	    KS_StateOut[0].set(k+28,KS_StateOut[2].get(k));
+	}
+	KS_StateOut[3]=permutate(KS_StateOut[0],PC2);
+
+
+
+	// Output of this iteration
+	return KS_StateOut;
+    }
+
+    //Encrypt datablock with a given key    
+    public static BitSet encrypt( BitSet dataBlock, BitSet key ){
+	BitSet RprLpr = new BitSet(64);
+	BitSet LprRpr = new BitSet(64);
+	BitSet LR = new BitSet(64);
+	BitSet[] KS_State = new BitSet[3];
+
+	for( int k = 0; k < 64; k++ )
+	    LR.set(k, dataBlock.get(k) );
+	
+
+	
+	//assigning the initial key to iteration 0 state
+	KS_State[0]=key;
+	for( int n = 0; n < 16; n++ ){
+	    System.out.println("iteration n: " + (n+1));
+	    // Compute key schedule
+	    System.out.println("Calling the key scheduler ");
+	    KS_State = keySchedule( n, KS_State ) ;
+	    
+	    // Assign n-th key to Kn
+	    Kn[n]=KS_State[3];
+
+	    //System.out.println("Kn "+ n);
+	    //printBits( Kn[n], 48 );	    
+
+	    LprRpr = iterate( LR , Kn[n]);
+	    
+	    //	    printBits( LprRpr, 64, "Block" );
+
+	    // updating the input for each iteration
+	    LR = LprRpr;
+	    System.out.println("end iteration: " + (n+1));
+	}
+	for(int k=0;k<32;k++){
+	    RprLpr.set(k,LprRpr.get(k+32));
+	    RprLpr.set((k+32),LprRpr.get(k));
+	}
+
+
+
+	// return the pre output block
+	return  RprLpr;
+	
+	
+    }
+
+    //method to take in a given encrypted message
+    public static BitSet decrypt(BitSet encrypted){
+	BitSet LR = new BitSet(64);
+	BitSet LprRpr= new BitSet(64);
+	BitSet RprLpr= new BitSet(64);
+	//for loop so we don't mess with encrypted
+	for( int k = 0; k < 64; k++ )
+	    LR.set(k, encrypted.get(k) );
+
+	for(int n=15;n>=0;n--){
+	    System.out.println("iteration n: " + (n+1));
+	    LprRpr= iterate(LR, Kn[n]);
+
+	    //update input for each iteration
+	    LR=LprRpr;
+	    System.out.println("end iteration: " + (n+1));
+	}
+	
+	for(int k=0;k<32;k++){
+	    RprLpr.set(k,LprRpr.get(k+32));
+	    RprLpr.set((k+32),LprRpr.get(k));
+	}
+
+	//just testing to see if global Kn worked
+	return RprLpr;
+    }
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* All methods below this point are utility methods for
+       performing bit operations
+       *
+       *
+       *
+       */
+
+
+
+    // Add parity bit to end of each 8-bit tuple in the key.
+    public static BitSet oddParity(BitSet key){
+
+	int k;
+
+	// Shift all bits to the left by one position.
+	for( k = 0; k < 63; k++ )
+	    key.set( k, key.get(k+1) );
+
+
+	// Add odd parity bit to end of each 8-bit tuple
+	for( k=7; k <= 63; k=k+8 )
+	    if((key.get(k-7,k).cardinality())%2==0)
+		key.set(k);
+	    else
+		key.set(k,false);
+	
+
+	// Return key with parity bits.
+	return key;
+    }
+
+
+
+
+    
+    public static BitSet[] DivideDataIntoBlocks( BitSet bitData, int nBlocks){
+	BitSet[] bitBlocksLSB= new BitSet[nBlocks];
+	BitSet[] bitBlocksMSB= new BitSet[nBlocks];
+	   
+	for(int k = 0; k < nBlocks; k++ ){
+	    bitBlocksLSB[k] = new BitSet(64);
+	    bitBlocksLSB[k]=bitData.get(k*64, ((k+1)*64));
+	    bitBlocksMSB[k] = changeLSBtoMSB( bitBlocksLSB[k] );
+	}
+	    
+	return bitBlocksMSB;
+    }
+    
+
+
+    public static BitSet changeLSBtoMSB( BitSet bitBlocksLSB ){
+	// THIS IS GHETTO AS SHIT BUT IT WORKS
+	// Get the number of 8-bit tuples
+	int tuples = 8;  // By definition there are 8 8-bit tuples in
+	// a block of 64 bits.
+	BitSet bitBlocksMSB = new BitSet(64);
+	int msbIndex=0;
+
+	// Compute the high-order bit index for the k-th tuple
+	// Loop over all tuples
+	for( int k = 1; k <= tuples; k++ ){
+	    // Computing the index of the MSB for this tuple 
+	    //  in the LSB array
+	    int i1 = 8*k - 1;
+	    
+	    // Assign the damn k-th tuple in MSB first
+	    for(int x=i1; x>=(i1-7);x--){
+		bitBlocksMSB.set(msbIndex,bitBlocksLSB.get(x));
+		msbIndex++;
+	    }    
+	}
+	return bitBlocksMSB;
+    }
+    
+    public static void printBits(BitSet bitset, int bitlen, String style){
+	if(style=="Block"){
+	    for( int k=0; k < bitlen; k++ ){
+	    
+		// Print a new line after every 8th bit.
+		if( k%8 == 0)
+		    System.out.println();
+	    
+		// Print boolean statements as 0 and 1
+		if( bitset.get(k) == true )
+		    System.out.print('1');
+		else
+		    System.out.print('0');
+	    
+	    }
+	    System.out.println();
+	
+	}
+	else{
+	    for( int k=0; k < bitlen; k++ ){
+	  
+		// Print boolean statements as 0 and 1
+		if( bitset.get(k) == true )
+		    System.out.print('1');
+		else
+		    System.out.print('0');	    
+	    }
+	    System.out.println();
+	}
+    }
+
+   
+
+
+    //read text file containing word characters and return data as string
+    public static String readData( String filename ){
+
+	String fileData="";
+       	File file = new File(filename);
+
+	// Read data from file line-by-line
+	try{
+	    Scanner sc2 = new Scanner( file );
+	    
+	    while(sc2.hasNext()){
+		fileData+=sc2.nextLine();
+	    }
+	}
+	catch (FileNotFoundException e){}
+
+
+	//Remove all special characters
+	fileData=fileData.replaceAll("[\\W_*]*","");
+
+	// Return data containing only word characters
+	return fileData;
+    }
+
+
+    // Read key via IO prompt
+    public static String readKey( ) {
+
+	String key = "";
+	Scanner sc = new Scanner( System.in );
+	System.out.println("Please enter a key. ");
+	key=sc.nextLine();
+
+	return key;
+
+    }
+
+
+    // Convert string to BitSet
+    public static BitSet stringToBinary( String stringIn ){
+
+	BitSet bitOut= new BitSet();
+	try{
+	    byte[] bytes= stringIn.getBytes("US-ASCII");
+	    //	    System.out.println(bytes.SIZE);
+	    ByteBuffer bb=ByteBuffer.wrap(bytes);
+	    bitOut = BitSet.valueOf(bb);
+	}
+	catch (UnsupportedEncodingException e){}	
+
+	return bitOut;
+	
+    }
+
+
+    // Compute number of 64-bit blocks in the data.
+    public static int computeNumBlocks( String fileData ){
+	int nBlocks;
+	
+	if(fileData.length()%8==0)
+	    nBlocks=(int)((fileData.length()/8));
+	else
+	    nBlocks=(int)(((fileData.length()+8)/8));
+	
+	return nBlocks;
+    }
+
+
+}
+
+
+
+
