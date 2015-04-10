@@ -522,7 +522,7 @@ public class assign1{
 
 
 
-	    // This is the ugliest fucking way to rotate an array.
+	    // This is the ugliest way to rotate an array.
 	    tmpC.set( 0,KS_StateIn[1].get(0) );
 	    tmpD.set( 0,KS_StateIn[2].get(0) );	    
 	    for( k=0; k< 27; k++ ){
@@ -726,7 +726,6 @@ public class assign1{
 
 
     public static BitSet changeLSBtoMSB( BitSet bitBlocksLSB ){
-	// THIS IS GHETTO AS SHIT BUT IT WORKS
 	// Get the number of 8-bit tuples
 	int tuples = 8;  // By definition there are 8 8-bit tuples in
 	// a block of 64 bits.
@@ -740,7 +739,7 @@ public class assign1{
 	    //  in the LSB array
 	    int i1 = 8*k - 1;
 	    
-	    // Assign the damn k-th tuple in MSB first
+	    // Assign the k-th tuple in MSB first
 	    for(int x=i1; x>=(i1-7);x--){
 		bitBlocksMSB.set(msbIndex,bitBlocksLSB.get(x));
 		msbIndex++;
